@@ -74,9 +74,10 @@ int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size)
 
         drflac_fuzzer = drflac_open_relaxed(read_fuzz_flacstream, seek_fuzz_flacstream, tell_fuzz_flacstream, container, NULL, NULL);
 
-        while (drflac_read_pcm_frames_s32(drflac_fuzzer, 256, drflac_fuzzer_out));
-
-        drflac_close(drflac_fuzzer);
+        if (drflac_fuzzer != NULL) {
+            while (drflac_read_pcm_frames_s32(drflac_fuzzer, 256, drflac_fuzzer_out));
+            drflac_close(drflac_fuzzer);
+        }
     }
     return 0;
 }
