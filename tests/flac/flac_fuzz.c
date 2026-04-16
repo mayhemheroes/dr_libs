@@ -54,6 +54,12 @@ static drflac_bool32 seek_fuzz_flacstream(void* pUserData, int offset, drflac_se
     }
 }
 
+static drflac_bool32 tell_fuzz_flacstream(void* pUserData, drflac_int64* pCursor)
+{
+    *pCursor = (drflac_int64)fuzz_flacstream_position;
+    return DRFLAC_TRUE;
+}
+
 int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size)
 {
     if (size > 2) {
@@ -66,7 +72,7 @@ int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size)
         fuzz_flacstream_position = 0;
         fuzz_flacstream_length = size-1;
 
-        drflac_fuzzer = drflac_open_relaxed(read_fuzz_flacstream, seek_fuzz_flacstream, container, NULL, NULL);
+        drflac_fuzzer = drflac_open_relaxed(read_fuzz_flacstream, seek_fuzz_flacstream, tell_fuzz_flacstream, container, NULL, NULL);
 
         while (drflac_read_pcm_frames_s32(drflac_fuzzer, 256, drflac_fuzzer_out));
 
