@@ -1,0 +1,10 @@
+# Historical Mayhem target (project dr-libs / target drlibs-fuzz, since 2022) — keep the names
+# so run history isn't orphaned. Upstream's own libFuzzer harness over dr_flac.
+# No testsuite: directive — seeds are optional; Mayhem's default corpus (server-accumulated
+# tar for this target) drives coverage, matching the historical integration.
+project: dr-libs
+target: drlibs-fuzz
+
+cmds:
+  - cmd: /mayhem/fuzz_dr_flac
+    libfuzzer: true
